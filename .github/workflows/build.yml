@@ -79,6 +79,8 @@ jobs:
           mv ./additional/* ./community/data/
           mv ./microsoft ./community/data/
 
+          ls -la ./community/data/
+
       - name: Build ad block
         run: |
           curl -sSL $ADGUARD_DNS_REJECT_URL | perl -ne '/^\|\|([-_0-9a-zA-Z]+(\.[-_0-9a-zA-Z]+){1,64})\^$/ && print "$1\n"' | perl -ne 'print if not /^[0-9]{1,3}(\.[0-9]{1,3}){3}$/' > temp-reject.txt
