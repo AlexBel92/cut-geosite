@@ -67,16 +67,17 @@ jobs:
           curl -sSL $WIN_SPY | grep "0.0.0.0" | awk '{print $2}' > ./win-spy.txt
           curl -sSL $WIN_UPDATE | grep "0.0.0.0" | awk '{print $2}' > ./win-update.txt
           curl -sSL $WIN_EXTRA | grep "0.0.0.0" | awk '{print $2}' > ./win-extra.txt
-          curl -sSL $MICROSOFT | grep "0.0.0.0" | awk '{print $2}' > ./microsoft.txt
+          curl -sSL $MICROSOFT > ./microsoft
           
           curl -sSL $GFW > ./community/data/gfw.txt
           curl -sSL $GREATFIRE > ./community/data/greatfire.txt
           
-          cp {antifilter-download,antifilter-download-community,refilter,win-spy,win-update,win-extra,microsoft}.txt ./community/data/
+          cp {antifilter-download,antifilter-download-community,refilter,win-spy,win-update,win-extra}.txt ./community/data/
           for f in ./community/data/*.txt; do mv "$f" "${f//.txt/}"; done
           
           rm -rf ./additional/README.md
           mv ./additional/* ./community/data/
+          mv ./microsoft ./community/data/
 
       - name: Build ad block
         run: |
