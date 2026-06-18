@@ -99,7 +99,7 @@ jobs:
       - name: Build geosite.dat file
         run: |
           cd custom || exit 1
-          go run ./ --exportlists=google,youtube,microsoft,discord,ru-blocked,private --togfwlist=ru-blocked --datapath=../community/data
+          go run ./ --exportlists=google,youtube,microsoft,discord,ru-blocked,private --togfwlist=ru-blocked --datapath=../community/data-ru
 
       - name: Move and zip files and generate sha256 hash
         run: |
