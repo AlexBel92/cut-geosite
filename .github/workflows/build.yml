@@ -95,7 +95,7 @@ jobs:
       - name: Build Ru only list
         run: |
           mkdir -p ./community/data-ru
-          cp ./community/data/{private,ru-available-only-inside,category-gov-ru,youtube,microsoft} ./community/data-ru/
+          cp ./community/data/{private,ru-available-only-inside,category-gov-ru,youtube} ./community/data-ru/
           cat ./community/data/antifilter-download-community ./community/data/refilter | sort --ignore-case -u > ./community/data-ru/ru-blocked
 
           ls -la ./community/data-ru/
@@ -103,13 +103,17 @@ jobs:
       - name: Build geosite.dat file
         run: |
           cd custom || exit 1
-          go run ./ --exportlists=  --datname=geosite-cut.dat --togfwlist=ru-blocked --datapath=../community/data-ru
+          go run ./ --exportlists=  --datname=geosite-ru-only.dat --togfwlist=ru-blocked --datapath=../community/data-ru
+          go run ./ --exportlists=google,youtube,microsoft,discord,ru-blocked,ru-blocked-all,private --datapath=../community/data
 
       - name: Move and zip files and generate sha256 hash
         run: |
-          install -Dp ./custom/publish/geosite-cut.dat ./publish/geosite-cut.dat
+          install -Dp ./custom/publish/geosite-ru-only.dat ./publish/geosite-ru-only.dat
+          install -Dp ./custom/publish/geosite.dat ./publish/geosite.dat
+          install -p {antifilter-download,antifilter-download-community,refilter,win-spy,win-update,win-extra}.txt ./publish/
+          install -p ./custom/publish/{ru-blocked,ru-blocked-all,discord,youtube,microsoft,google,private}.txt ./publish/
           
-          (cd ./publish && sha256sum geosite-cut.dat > geosite-cut.dat.sha256sum)
+          (cd ./publish && sha256sum geosite.dat > geosite.dat.sha256sum)
 
       - name: Release and upload assets
         uses: svenstaro/upload-release-action@v2
