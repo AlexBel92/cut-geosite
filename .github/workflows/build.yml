@@ -26,10 +26,7 @@ jobs:
           echo "ADGUARD_DNS_REJECT_URL=https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt" >> $GITHUB_ENV
           echo "WIN_SPY=https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt" >> $GITHUB_ENV
           echo "WIN_UPDATE=https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/update.txt" >> $GITHUB_ENV
-          echo "WIN_EXTRA=https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/extra.txt" >> $GITHUB_ENV
-          
-          echo "MICROSOFT=https://raw.githubusercontent.com/v2fly/domain-list-community/refs/heads/master/data/microsoft" >> $GITHUB_ENV
-          
+          echo "WIN_EXTRA=https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/extra.txt" >> $GITHUB_ENV        
           
           echo "GFW=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/refs/heads/release/gfw.txt" >> $GITHUB_ENV
           echo "GREATFIRE=https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/refs/heads/release/greatfire.txt" >> $GITHUB_ENV
@@ -67,7 +64,6 @@ jobs:
           curl -sSL $WIN_SPY | grep "0.0.0.0" | awk '{print $2}' > ./win-spy.txt
           curl -sSL $WIN_UPDATE | grep "0.0.0.0" | awk '{print $2}' > ./win-update.txt
           curl -sSL $WIN_EXTRA | grep "0.0.0.0" | awk '{print $2}' > ./win-extra.txt
-          curl -sSL $MICROSOFT > ./microsoft
           
           curl -sSL $GFW > ./community/data/gfw.txt
           curl -sSL $GREATFIRE > ./community/data/greatfire.txt
@@ -77,7 +73,6 @@ jobs:
           
           rm -rf ./additional/README.md
           mv ./additional/* ./community/data/
-          mv ./microsoft ./community/data/
 
           ls -la ./community/data/
 
@@ -102,12 +97,14 @@ jobs:
           mkdir -p ./community/data-ru
           cp ./community/data/{private,ru-available-only-inside,category-gov-ru,youtube,microsoft} ./community/data-ru/
           cat ./community/data/antifilter-download-community ./community/data/refilter | sort --ignore-case -u > ./community/data-ru/ru-blocked
+
+          ls -la ./community/data-ru/
           
       - name: Build geosite.dat file
         run: |
           cd custom || exit 1
           go run ./ --exportlists=  --datname=geosite-ru-only.dat --togfwlist=ru-blocked --datapath=../community/data-ru
-          go run ./ --exportlists=google,youtube,microsoft,discord,ru-blocked,ru-blocked-all,private --datapath=../community/data
+          go run ./ --exportlists=google,youtube,discord,ru-blocked,ru-blocked-all,private --datapath=../community/data
 
       - name: Move and zip files and generate sha256 hash
         run: |
