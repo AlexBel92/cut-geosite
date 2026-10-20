@@ -126,6 +126,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           keep-count: 5
+          keep-old-minor-releases: false
           remove-tags: true
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v2
